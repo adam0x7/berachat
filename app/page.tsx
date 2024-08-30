@@ -15,11 +15,12 @@ import Image from "next/image";
 import MarkdownRenderer from "./LinkOku";
 import OkuSVG from "./oku";
 import Aperture from "./aperture";
+
 const examples = [
-  "Search all pools trading UNI and return their 24H volume, fees collected, and pairs traded",
-  "Get a V3 snapshot for the pool PEPE/ETH, at address 0x11950d141ecb863f01007add7d1a342041227b58 at block  17294375",
-  "What pools are trading LDO with the most liquidity?",
-  "Get recent swaps for address 0x9c8b59443fd54567e33805fb389c3d9b9196ed2e",
+  "What is the monthly BGT reward rate for the Infrared validator month over month from June to August of 2024?",
+  "Which vaults is the wallet 0x98F43E30A80af84cbC55599392A16983f832CEB3 staked in?",
+  "What pools are trading BERA with the most liquidity?",
+  "Which validator built block 3544950? How much were their BGT rewards?",
 ];
 
 export default function Chat() {
@@ -47,120 +48,50 @@ export default function Chat() {
   const disabled = isLoading || input.length === 0;
 
   return (
-    <main className="flex flex-col items-center justify-between pb-40">
-      <div className="absolute top-5 hidden w-full justify-between px-5 sm:flex">
-        <div className="rounded-lg p-2 transition-colors duration-200 hover:bg-stone-100 sm:bottom-auto">
-          {/* <VercelIcon /> */}
-          <div className="grid grid-cols-2 justify-start gap-2 lg:grid-cols-1">
-            <span className="blockv2 h-8 w-auto sm:h-10">UniChat</span>
-            <p className="hidden flex-col items-center justify-center gap-2  text-center text-sm text-xs text-gray-400 md:flex">
-              <span className="text-md">In partnership with</span>{" "}
-              {/* Impor svg and link to aperture FInance website */}
-              <a
-                href="https://www.aperture.finance/?source=Unichat&category=banner&tag=General&title=unichat"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline"
-              >
-                <Image src={aperture} alt="Atperture Finance" width={80} />
-              </a>
-              .
-            </p>
-          </div>
+    <main className="flex flex-col items-center justify-between pb-40 bg-[url('/bg.png')] bg-cover bg-fixed min-h-screen h-screen overflow-y-auto text-white">
+      <div className="absolute top-5 w-full flex justify-between px-5">
+        <div className="rounded-lg p-2">
+          <Image src="/bera_white_smol.svg" alt="BeraChain" width={100} height={44} />
         </div>
-        <a
-          href="https://github.com/0xaaiden/UniChat"
-          target="_blank"
-          className="rounded-lg p-2 transition-colors duration-200 hover:bg-stone-100 sm:bottom-auto"
-        >
-          <GithubIcon />
-        </a>
       </div>
       {messages.length > 0 ? (
         messages.map((message, i) => (
           <div
             key={i}
-            className={clsx(
-              "flex w-full items-center justify-center  border-b border-gray-200 py-8",
-              message.role === "user" ? "bg-white" : "bg-gray-100",
-            )}
+            className="flex w-full items-center justify-center border-b border-gray-200/10 py-8 bg-black/30 backdrop-blur-sm"
           >
             <div className="flex w-full max-w-screen-md items-start space-x-4 px-5 sm:px-0">
-              <div
-                className={clsx(
-                  "p-1.5 text-white",
-                  message.role === "assistant" ? "bg-green-500" : "bg-black",
-                )}
-              >
+              <div className="flex-shrink-0">
                 {message.role === "user" ? (
-                  <User width={20} />
+                  <User width={20} className="text-white" />
                 ) : (
-                  <Bot width={20} />
+                  <Image src="/bera.svg" alt="AI" width={20} height={20} />
                 )}
               </div>
-              {/* <ReactMarkdown
-                className="prose mt-1 w-full overflow-auto break-words prose-p:leading-relaxed"
-                remarkPlugins={[remarkGfm]}
-                components={{
-                  // open links in new tab
-                  a: (props) => (
-                    <a {...props} target="_blank" rel="noopener noreferrer" />
-                  ),
-                }}
-              >
-                {message.content}
-              </ReactMarkdown> */}
-              <MarkdownRenderer content={message.content} />
+              <div className="flex-grow prose mt-1 w-full overflow-auto break-words prose-p:leading-relaxed text-white">
+                <MarkdownRenderer content={message.content} />
+              </div>
             </div>
           </div>
         ))
       ) : (
-        <div className="border-gray-200sm:mx-0 mx-5 mt-20 max-w-screen-md rounded-md border sm:w-full">
+        <div className="border-gray-700 mx-5 mt-20 max-w-screen-md rounded-md border sm:w-full bg-black/30 backdrop-blur-sm">
           <div className="flex flex-col space-y-4 p-7 sm:p-10">
-            <h1 className="text-lg font-semibold text-black">
-              Welcome to UniChat!
+            <h1 className="text-lg font-semibold text-white">
+              Welcome to BeraChat 🐻⛓️
             </h1>
-            <p className="text-gray-500">
-              This is an{" "}
-              <a
-                href="https://github.com/0xaaiden/unichat"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-medium underline underline-offset-4 transition-colors hover:text-black"
-              >
-                open-source
-              </a>{" "}
-              AI chatbot that uses{" "}
-              <a
-                href="https://platform.openai.com/docs/guides/gpt/function-calling"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-medium underline underline-offset-4 transition-colors hover:text-black"
-              >
-                OpenAI Functions
-              </a>{" "}
-              to interact with{" "}
-              <a
-                href="https://uniswap.org"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-medium underline underline-offset-4 transition-colors hover:text-black"
-              >
-                Uniswap V3
-              </a>{" "}
-              with natural language.
+            <p className="text-white">
+              This is an AI chatbot that uses OpenAI Functions to interact with BeraChain using natural language.
             </p>
-            <p className="text-gray-500">
-              You can ask it about pool snapshots, latest block data, search
-              token pair pools, fetch pool liquidity, and source user-specific
-              swap data.
+            <p className="text-white">
+              You can ask about validator rewards, latest block data, search BEX token pair pools, fetch pool liquidity, and BGT rewards of validators.
             </p>
           </div>
-          <div className="flex flex-col  space-y-4 break-all border-t border-gray-200 bg-gray-50 p-7 sm:p-10">
+          <div className="flex flex-col space-y-4 break-all border-t border-gray-700 bg-black/20 p-7 sm:p-10">
             {examples.map((example, i) => (
               <button
                 key={i}
-                className=" whitespace-pre-wrap break-words rounded-md border border-gray-200 bg-white px-5 py-3 text-left text-sm text-gray-500 transition-all duration-75 hover:border-black hover:text-gray-700 active:bg-gray-50"
+                className="whitespace-pre-wrap break-words rounded-md border border-gray-700 bg-black/30 px-5 py-3 text-left text-sm text-white transition-all duration-75 hover:bg-black/50 active:bg-black/60"
                 onClick={() => {
                   setInput(example);
                   inputRef.current?.focus();
@@ -172,11 +103,11 @@ export default function Chat() {
           </div>
         </div>
       )}
-      <div className="fixed bottom-0 flex w-full flex-col items-center space-y-3 bg-gradient-to-b from-transparent via-gray-100 to-gray-100 p-5 pb-3 sm:px-0">
+      <div className="fixed bottom-0 flex w-full flex-col items-center space-y-3 bg-gradient-to-b from-transparent via-black/70 to-black/70 p-5 pb-3 sm:px-0">
         <form
           ref={formRef}
           onSubmit={handleSubmit}
-          className="relative w-full max-w-screen-md rounded-xl border border-gray-200 bg-white px-4 pb-2 pt-3 shadow-lg sm:pb-3 sm:pt-4"
+          className="relative w-full max-w-screen-md rounded-xl border border-gray-700 bg-black/50 px-4 pb-2 pt-3 shadow-lg sm:pb-3 sm:pt-4"
         >
           <Textarea
             ref={inputRef}
@@ -194,14 +125,14 @@ export default function Chat() {
               }
             }}
             spellCheck={false}
-            className="w-full pr-10 focus:outline-none"
+            className="w-full pr-10 focus:outline-none bg-transparent text-white placeholder-gray-400"
           />
           <button
             className={clsx(
               "absolute inset-y-0 right-3 my-auto flex h-8 w-8 items-center justify-center rounded-md transition-all",
               disabled
-                ? "cursor-not-allowed bg-white"
-                : "bg-green-500 hover:bg-green-600",
+                ? "cursor-not-allowed opacity-50"
+                : "bg-white/10 hover:bg-white/20",
             )}
             disabled={disabled}
           >
@@ -217,30 +148,9 @@ export default function Chat() {
             )}
           </button>
         </form>
-        <p className="flex items-center justify-center  gap-2 text-center text-xs text-gray-400">
-          <span className="text-md">Supported by</span>{" "}
-          {/* Impor svg and link to aperture FInance website */}
-          <a
-            href="https://oku.trade"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline"
-          >
-            <OkuSVG
-              color={"black"}
-              width={58}
-              className="w-[48px] md:w-[58px]"
-            />
-          </a>
-          <span className="flex md:hidden">and</span>
-          <a
-            href="https://www.aperture.finance/?source=Unichat&category=banner&tag=General&title=unichat"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline"
-          >
-            <Aperture color={"black"} width={95} className="md:hidden" />
-          </a>
+        <p className="flex items-center justify-center gap-2 text-center text-xs text-gray-400">
+          <span className="text-md">Powered by</span>
+          <Image src="/bera_white_smol.svg" alt="BeraChain" width={80} height={35} />
         </p>
       </div>
     </main>

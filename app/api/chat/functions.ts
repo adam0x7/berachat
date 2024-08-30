@@ -1,399 +1,265 @@
 // import { log } from "console";
 
 type FunctionNames =
-  | "cush_getV3Pool"
-  | "cush_liveBlock"
-  | "cush_search"
-  | "cush_getPoolFees"
-  | "cush_poolLiquidity"
-  | "cush_topTokens"
-  | "cush_ordersForUser";
+  | "getBlock"
+  | "getBlockReward"
+  | "getBlocks"
+  | "getGlobalCuttingBoardWeights"
+  | "getFriendsOfTheChef"
+  | "getTokenInformation"
+  | "getUser"
+  | "getValidator"
+  | "getValidators"
+  | "getVault"
+  | "getBexGlobalDatas"
+  | "getBexGlobalDayDatas"
+  | "getPools"
+  | "getVaultData"
+  | "describeAndDebugTransaction";
 
 export const functions: {
   name: FunctionNames;
   description: string;
   parameters: object;
 }[] = [
-    {
-      name: "cush_getV3Pool",
-      description: "Get V3 pool snapshot address",
-      parameters: {
-        type: "object",
-        properties: {
-          target_pool: {
-            type: "string",
-            description: "Address of the pool",
-          },
-          block: {
-            type: "number",
-            description: "Block number to get price at",
-          },
-          numObs: {
-            type: "number",
-            description: "Number of observations to get",
-          },
+  {
+    name: "getBlock",
+    description: "Retrieve detailed information about a specific block on the Berachain network, including its number, timestamp, and associated validator data.",
+    parameters: {
+      type: "object",
+      properties: {
+        blockId: {
+          type: "string",
+          description: "The unique identifier or number of the block",
         },
-        required: ["target_pool", "block", "numObs"],
       },
+      required: ["blockId"],
     },
-    {
-      //
-      name: "cush_liveBlock",
-      description: "Get the latest block number",
-      // no parameters
-      parameters: {
-        type: "object",
-        properties: {},
-        required: [],
-      },
-    },
-    {
-      name: "cush_search",
-      description: "Search for pool given a single token or  a pair",
-      parameters: {
-        type: "object",
-        properties: {
-          searchText: {
-            type: "string",
-            description: `Search text query given by users. For single match, accepted formats for search text are token names, symbols, token Address, pool Address. For pair match, must provide either a " ", "/", or "-" in between pair items`,
-          },
+  },
+  {
+    name: "getBlockReward",
+    description: "Fetch information about the rewards distributed for a particular block, including the amount and recipients.",
+    parameters: {
+      type: "object",
+      properties: {
+        id: {
+          type: "string",
+          description: "The unique identifier of the block reward",
         },
-        required: ["searchText"],
       },
+      required: ["id"],
     },
-    {
-      name: "cush_poolLiquidity",
-      description: "Get liquidity of a given pool at a given block",
-      parameters: {
-        type: "object",
-        properties: {
-          pool: {
-            type: "string",
-            description: "Address of the pool to get liquidity of",
-          },
-          block: {
-            type: "number",
-            description: "Block number to get liquidity at. ",
-          },
+  },
+  {
+    name: "getBlocks",
+    description: "Retrieve a list of recent blocks on the Berachain network, providing an overview of recent network activity and validator performance.",
+    parameters: {
+      type: "object",
+      properties: {
+        first: {
+          type: "number",
+          description: "The number of most recent blocks to retrieve",
         },
-        required: ["pool", "block"],
       },
+      required: ["first"],
     },
-    {
-      name: "cush_getPoolFees",
-      description: "Get 24H fees of a given pool",
-      parameters: {
-        type: "object",
-        properties: {
-          poolAddr: {
-            type: "string",
-
-            description: "Address of the pool to get fees of.",
-          },
+  },
+  {
+    name: "getGlobalCuttingBoardWeights",
+    description: "Obtain the current global cutting board weights, which determine the distribution of rewards across the network's validators and their delegators.",
+    parameters: {
+      type: "object",
+      properties: {},
+      required: [],
+    },
+  },
+  {
+    name: "getFriendsOfTheChef",
+    description: "Retrieve information about the 'friends of the chef' for a specific address, showing relationships and connections within the Berachain ecosystem.",
+    parameters: {
+      type: "object",
+      properties: {
+        receiver: {
+          type: "string",
+          description: "The address of the receiver to query for friends of the chef",
         },
-        required: ["poolAddr"],
       },
+      required: ["receiver"],
     },
-
-    {
-      name: "cush_ordersForUser",
-      description: "Get all swaps for a given user (address)",
-      parameters: {
-        type: "object",
-        properties: {
-          userAddr: {
-            type: "string",
-            description: "Address of the user to get swaps for.",
-          },
+  },
+  {
+    name: "getTokenInformation",
+    description: "Fetch detailed information about a specific token on the Berachain network, including its name, symbol, total supply, and other relevant data.",
+    parameters: {
+      type: "object",
+      properties: {
+        id: {
+          type: "string",
+          description: "The unique identifier or address of the token",
         },
-        required: ["userAddr"],
       },
+      required: ["id"],
     },
-  ];
-
-// Generate functions based on API endpoints
-async function cush_getV3Pool(
-  target_pool: string,
-  block: number,
-  numObs: number,
-) {
-  // Implement the logic to get V3 pool snapshot address based on the provided API endpoint
-  //add method to payload, method name is cush_getV3Pool
-  //add params to payload, params is an array of strings
-  const payload = {
-    jsonrpc: "2.0",
-    method: "cush_getV3Pool",
-    params: [target_pool, block],
-    id: 1,
-  };
-  try {
-    const response = await fetch("https://cush.apiary.software/ethereum", {
-      method: "POST",
-      body: JSON.stringify(payload),
-      headers: {
-        "Content-Type": "application/json",
+  },
+  {
+    name: "getUser",
+    description: "Retrieve comprehensive information about a user, including their validator information, vault deposits, BGT earned, and LP staked data. This provides a holistic view of a user's activity and holdings on the Berachain network.",
+    parameters: {
+      type: "object",
+      properties: {
+        address: {
+          type: "string",
+          description: "The address of the user to query",
+        },
       },
-    });
-
-    const result = await response.json();
-    // remove positions and ticks from result
-    const { Positions, Ticks, ...rest } = result.result;
-    // console.log("fetch result: ", rest);
-
-    // return result
-    return rest;
-  } catch (error) {
-    // save error to log file
-    console.log("error: ", payload, error);
-    return error;
-  }
-}
-
-// get liveBlock
-async function cush_liveBlock() {
-  // Implement the logic to get live block based on the provided API endpoint
-  const payload = {
-    jsonrpc: "2.0",
-    method: "cush_liveBlock",
-    params: [],
-    id: 1,
-  };
-  try {
-    const response = await fetch("https://cush.apiary.software/ethereum", {
-      method: "POST",
-      body: JSON.stringify(payload),
-      headers: {
-        "Content-Type": "application/json",
+      required: ["address"],
+    },
+  },
+  {
+    name: "getValidator",
+    description: "Fetch detailed information about a specific validator, including their performance metrics, delegation data, BGT emission, and cutting board information. This function accepts either a validator's address or name.",
+    parameters: {
+      type: "object",
+      properties: {
+        input: {
+          type: "string",
+          description: "The address or name of the validator",
+        },
       },
-    });
-
-    const result = await response.json();
-    // console.log("fetch result: ", result);
-    return result;
-  } catch (error) {
-    console.log("error: ", payload, error);
-    return error;
-  }
-}
-
-async function cush_search(searchText: string) {
-  const payload = {
-    jsonrpc: "2.0",
-    method: "cush_search",
-    params: [searchText],
-    id: 1,
-  };
-  try {
-    const response = await fetch("https://cush.apiary.software/ethereum", {
-      method: "POST",
-      body: JSON.stringify(payload),
-      headers: {
-        "Content-Type": "application/json",
+      required: ["input"],
+    },
+  },
+  {
+    name: "getValidators",
+    description: "Retrieve a list of all active validators on the Berachain network, providing an overview of the network's validator set and their key metrics.",
+    parameters: {
+      type: "object",
+      properties: {},
+      required: [],
+    },
+  },
+  {
+    name: "getVault",
+    description: "Obtain information about a specific vault, including its address, total value locked, and other relevant metrics.",
+    parameters: {
+      type: "object",
+      properties: {
+        address: {
+          type: "string",
+          description: "The address of the vault to query",
+        },
       },
-    });
-
-    const result = await response.json();
-    // console.log("fetch result: ", payload, result);
-    return result.result;
-  } catch (error) {
-    console.log("error: ", payload, error);
-    return error;
-  }
-}
-
-async function cush_poolLiquidity(pool: string, block: number) {
-  const payload = {
-    jsonrpc: "2.0",
-    method: "cush_poolLiquidity",
-
-    params: [pool, block],
-    id: 1,
-  };
-  try {
-    const response = await fetch("https://cush.apiary.software/ethereum", {
-      method: "POST",
-      body: JSON.stringify(payload),
-      headers: {
-        "Content-Type": "application/json",
+      required: ["address"],
+    },
+  },
+  {
+    name: "getBexGlobalDatas",
+    description: "Retrieve global data for the Berachain Exchange (BEX), including total value locked, transaction count, and overall volume in USD.",
+    parameters: {
+      type: "object",
+      properties: {},
+      required: [],
+    },
+  },
+  {
+    name: "getBexGlobalDayDatas",
+    description: "Fetch daily global data for the Berachain Exchange (BEX) for a specific date, providing insights into daily trading activity and metrics.",
+    parameters: {
+      type: "object",
+      properties: {
+        date: {
+          type: "string",
+          description: "The date for which to retrieve BEX global data (format: YYYY-MM-DD)",
+        },
       },
-    });
-
-    const result = await response.json();
-    // console.log("fetch result: ", result);
-    return result.result;
-  } catch (error) {
-    console.log("error: ", payload, error);
-    return error;
-  }
-}
-
-async function cush_getPoolFees(poolAddr: string) {
-  const payload = {
-    jsonrpc: "2.0",
-
-    method: "cush_getPoolFees",
-    params: [poolAddr],
-    id: 1,
-  };
-  try {
-    const response = await fetch("https://cush.apiary.software/ethereum", {
-      method: "POST",
-      body: JSON.stringify(payload),
-      headers: {
-        "Content-Type": "application/json",
+      required: ["date"],
+    },
+  },
+  {
+    name: "getPools",
+    description: "Retrieve a list of liquidity pools available on the Berachain Exchange (BEX), including their token pairs, liquidity, and other relevant data.",
+    parameters: {
+      type: "object",
+      properties: {},
+      required: [],
+    },
+  },
+  {
+    name: "getVaultData",
+    description: "Fetch comprehensive data about a specific vault, including top BGT farmers, cumulative data, and reward sums. This provides deep insights into the vault's performance and user activity.",
+    parameters: {
+      type: "object",
+      properties: {
+        vaultName: {
+          type: "string",
+          description: "The name of the vault to query (e.g., 'BERPS', 'BEND', 'BEX HONEY-WBTC')",
+        },
       },
-    });
-
-    const result = await response.json();
-    // console.log("fetch result: ", result);
-    return result.result;
-  } catch (error) {
-    console.log("error: ", payload, error);
-    return error;
-  }
-}
-
-async function cush_topTokens() {
-  const payload = {
-    jsonrpc: "2.0",
-    method: "cush_topTokens",
-    params: [[]],
-    id: 1,
-  };
-
-  try {
-    const response = await fetch("https://cush.apiary.software/ethereum", {
-      method: "POST",
-      body: JSON.stringify(payload),
-
-      headers: {
-        "Content-Type": "application/json",
+      required: ["vaultName"],
+    },
+  },
+  {
+    name: "describeAndDebugTransaction",
+    description: "Provide a detailed description and debug information for a specific transaction on the Berachain network. This includes a human-readable explanation of the transaction's purpose and technical details from the execution trace.",
+    parameters: {
+      type: "object",
+      properties: {
+        txHash: {
+          type: "string",
+          description: "The transaction hash to analyze and debug",
+        },
       },
-    });
-
-    const result = await response.json();
-    // console.log("fetch result: ", result);
-    return result.result;
-  } catch (error) {
-    console.log("error: ", payload, error);
-
-    return error;
-  }
-}
-
-async function cush_ordersForUser(userAddr: string) {
-  const now = new Date();
-  const oneWeekAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-  const payload = {
-    jsonrpc: "2.0",
-    method: "cush_marketOrdersForUser",
-    params: [userAddr, oneWeekAgo.getTime(), now.getTime()],
-    id: 1,
-  };
-  console.log("payload", payload);
-  try {
-    const response = await fetch("https://cush.apiary.software/ethereum", {
-      method: "POST",
-      body: JSON.stringify(payload),
-
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const result = await response.json();
-    // console.log("fetch result: ", result);
-    return result.result;
-  } catch (error) {
-    console.log("error: ", payload, error);
-    return error;
-  }
-}
-
-async function cush_simulateV3Pool(
-  target_pool: string,
-  block: number,
-  numObs: number,
-) {
-  // Implement the logic to simulate V3 pool based on the provided API endpoint
-}
-
-async function cush_getTokenAmounts(target_pool: string, block: number) {
-  // Implement the logic to get token amounts in a pool at a given block based on the provided API endpoint
-}
-
-async function cush_getPositionByTokenId(tokenId: number) {
-  // Implement the logic to get position by token ID based on the provided API endpoint
-}
-
-async function cush_getToken(token: string, block: number) {
-  // Implement the logic to get token information based on the provided API endpoint
-}
-
-async function cush_getTokenLevel1(token: string, block: number) {
-  // Implement the logic to get token level 1 information based on the provided API endpoint
-}
-
-async function cush_getTokensFromPoolAddress(addr: string) {
-  // Implement the logic to get tokens from pool address based on the provided API endpoint
-}
-
-async function cush_getPoolsContainingToken(target_token: string) {
-  // Implement the logic to get pools containing token based on the provided API endpoint
-}
-
-async function cush_getAllNewPositionsCreated(
-  timestamp: number,
-  lookback: number,
-) {
-  // Implement the logic to get all new positions created and show percentage change based on the provided API endpoint
-}
-
-async function cush_getAllNewTransactions(timestamp: number, lookback: number) {
-  // Implement the logic to get all new transactions and show percentage change based on the provided API endpoint
-}
-
-async function cush_getNewPositionsCreatedByPool(
-  pool_address: string,
-  timestamp: number,
-  lookback: number,
-) {
-  // Implement the logic to get new positions created by pool and show percentage change based on the provided API endpoint
-}
-
-async function cush_getNewTransactionsByPool(
-  pool_address: string,
-  timestamp: number,
-  lookback: number,
-) {
-  // Implement the logic to get new transactions by pool and show percentage change based on the provided API endpoint
-}
-// Implement the other functions similarly
+      required: ["txHash"],
+    },
+  },
+];
 
 // Create a generic function that can be used to run any function
 export async function runFunction(name: string, args: any) {
-  switch (name) {
-    case "cush_getV3Pool":
-      return await cush_getV3Pool(
-        args["target_pool"],
-        args["block"],
-        args["numObs"],
-      );
+  const baseUrl = 'http://localhost:3000';
+  const endpointMap: { [key: string]: string } = {
+    getBlock: 'block',
+    getBlockReward: 'block-reward',
+    getBlocks: 'blocks',
+    getGlobalCuttingBoardWeights: 'global-cutting-board-weights',
+    getFriendsOfTheChef: 'friends-of-the-chef',
+    getTokenInformation: 'token-information',
+    getUser: 'user',
+    getValidator: 'validator',
+    getValidators: 'validators',
+    getVault: 'vault',
+    getBexGlobalDatas: 'bex-global-datas',
+    getBexGlobalDayDatas: 'bex-global-day-datas',
+    getPools: 'pools',
+    getVaultData: 'vault-data',
+    describeAndDebugTransaction: 'describe-and-debug-transaction'
+  };
 
-    // Implement the other function cases similarly
-    case "cush_liveBlock":
-      return await cush_liveBlock();
+  const endpoint = endpointMap[name];
+  if (!endpoint) {
+    throw new Error(`Unknown function: ${name}`);
+  }
 
-    case "cush_search":
-      return await cush_search(args["searchText"]);
-    case "cush_getPoolFees":
-      return await cush_getPoolFees(args["poolAddr"]);
-    case "cush_topTokens":
-      return await cush_topTokens();
+  try {
+    let url = `${baseUrl}/${endpoint}`;
+    let method = 'GET';
+    let body;
 
-    case "cush_ordersForUser":
-      return await cush_ordersForUser(args["userAddr"]);
+    if (['getBlocks', 'getBexGlobalDayDatas'].includes(name)) {
+      url += `?${new URLSearchParams(args).toString()}`;
+    } else if (Object.keys(args).length > 0) {
+      url += `/${Object.values(args)[0]}`;
+    }
 
-    default:
-      return null;
+    const response = await fetch(url, { method });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error(`Error in runFunction for ${name}:`, error);
+    throw error;
   }
 }
